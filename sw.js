@@ -21,8 +21,6 @@ var staticCacheName='restaurant-v1';
 self.addEventListener('install',function(event){
 
 //distler eklendi.
-
-
 	var urlsToCache=[
 		'/',
 		'js/dbhelper.js',
@@ -38,15 +36,15 @@ self.addEventListener('install',function(event){
 		'dist/js/idb.js',
 		'dist/js/idb-restaurant.js'
 	];
-	
+
 	event.waitUntil(
 			caches.open(staticCacheName).then(function(cache){
 				return cache.addAll(urlsToCache);
 			})
 		)
 
-
 });
+
 self.addEventListener('fetch',function(event){
 	event.respondWith(
 		caches.match(event.request,{ignoreSearch:true}).then(function(response){
@@ -54,7 +52,6 @@ self.addEventListener('fetch',function(event){
 		})
 	);
 });
-
 
 self.addEventListener('activate',function(event){
 	event.waitUntil(
@@ -72,8 +69,6 @@ self.addEventListener('activate',function(event){
 				
 		})
 			
-	);
-	
-	
+	);	
 });
 

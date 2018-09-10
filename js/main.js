@@ -165,7 +165,13 @@ createRestaurantHTML = (restaurant) => {
   if(restaurant.id==i){
     image.id='restaurant'+i+'-img';
     image.src = "images/"+i+"-500_small.jpg";
+   /**
+    * if width is more than 1024px, apply this.
+    */
     source1.srcset=DBHelper.imageUrlForRestaurant(restaurant);
+   /**
+    * if width of screen is more than 480 px put images-1000.
+    */
     source2.srcset="images/"+i+"-1000_medium.jpg";
     image.alt=altArray[i-1];
   }
@@ -210,7 +216,10 @@ createRestaurantHTML = (restaurant) => {
     divHearth.src="img/heart.svg";
      divHearth.align="right";
      divHearth.alt="Favorite-Button";
-     
+
+/**
+ * Add favorite button status to db, when user click the button.
+ */
   divHearth.addEventListener("click", function(){
     if(countFav == 1){
         divHearth.src= "img/like.svg";
@@ -219,7 +228,7 @@ createRestaurantHTML = (restaurant) => {
         for(let i=1; i<=10; i++){
           if(restaurant.id == i){
               fetch('http://localhost:1337/restaurants/'+i+'/?is_favorite=true', {method: 'PUT'})
-              .then(function(response){
+              .then(response => {
               return response.json();
               })
           }
@@ -231,7 +240,7 @@ createRestaurantHTML = (restaurant) => {
       for(let i=1 ; i<=10; i++){
         if(restaurant.id == i){
             fetch('http://localhost:1337/restaurants/'+i+'/?is_favorite=false', {method: 'PUT'})
-            .then(function(response){
+            .then(response => {
               return response.json();
               }) 
         }

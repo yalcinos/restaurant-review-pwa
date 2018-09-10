@@ -7,11 +7,9 @@ var _idb2 = _interopRequireDefault(_idb);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-///////////////////
-
-//INITIALIZE idp objects
-
-////////////////////
+/**
+  Initialize idp object for offline storage.
+*/
 var dbPromised = _idb2.default.open('review-store', 1, function (upgradeDB) {
   switch (upgradeDB.oldVersion) {
     case 0:
@@ -25,21 +23,9 @@ var dbPromisedRestaurantDetail = _idb2.default.open('restaurant-store', 1, funct
 
   }
 });
-var dbPromisedOutBox = _idb2.default.open('outbox', 1, function (upgradeDB) {
-  switch (upgradeDB.oldVersion) {
-    case 0:
-      upgradeDB.createObjectStore('outitems', { keyPath: 'id' });
-
-  }
-});
-//END OF INITIALIZE
-
-
-////////////////
-
-//ADD REVIEW DATA TO INDEXDB FOR OFFLINE USAGE
-
-/////////////
+/**
+ *   Add review data to IndexDB for offline usage.
+ */
 dbPromised.then(function (db) {
   fetch("http://localhost:1337/reviews/").then(function (response) {
     return response.json();
@@ -52,22 +38,16 @@ dbPromised.then(function (db) {
     }
     return tx.complete && store.getAll();
   });
-}).then(function (result) {
-  console.log("Done!");
 });
 
-//Get Data from indexDB
-dbPromised.then(function (db) {
-  return db.transaction("reviews").objectStore("reviews").get(1);
-}).then(function (obj) {
-  return console.log(obj.name, obj.is_favorite, obj.neighborhood);
-});
-
-//When user offline,get review from indexDB for offline usage.
+/**
+  When user offline,get review from indexDB for offline usage.
+*/
 if (window.navigator.onLine) {
   console.log('online!');
 } else {
   console.log('offline');
+
   //Post data to page when user offline.
   dbPromised.then(function (db) {
     var tx = db.transaction("reviews", "readonly");
@@ -78,17 +58,15 @@ if (window.navigator.onLine) {
       return parseInt(res.restaurant_id) == getParameterByName('id');
     });
     var ul = document.getElementById('reviews-list');
-    console.log('indsad:', reviewForRest);
     fillReviewsHTML(reviewForRest);
   });
 }
-/////////////////////////////////////////7
+/**
+  *Starts Restaurant Detail Page.
+  *Add restaurant data when user offline to indexDB.
+  *Get and put restaurant data to /restaurant route.
+*/
 
-//---RESTAURANT-DETAİL----
-
-//////////////////////////////////////////
-//add restaurant data when user offline to ındexDB.
-//Get idb for restaurant details of restaurant_info page
 if (window.navigator.onLine) {
   console.log('online!');
   dbPromisedRestaurantDetail.then(function (db) {
@@ -118,19 +96,9 @@ if (window.navigator.onLine) {
     var IndexedRestData = data.find(function (res) {
       return parseInt(res.id) == getParameterByName('id');
     });
-    console.log('ABD:', IndexedRestData);
     fillRestaurantHTML(IndexedRestData);
-    var opHours = IndexedRestData.name;
-    console.log('XCVB:', opHours);
-    //fillRestaurantHoursHTML(opHours);
   });
 }
-
-/////////////////////
-
-////ADD LOCALSTORAGE FOR REVIEW OFFLINE
-
-/////////////////
 },{"idb":2}],2:[function(require,module,exports){
 'use strict';
 

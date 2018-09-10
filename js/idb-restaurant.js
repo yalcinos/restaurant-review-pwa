@@ -17,14 +17,14 @@ import idb from 'idb';
   }
 });
 /**
-    Add review data to IndexDB for offline usage.
-*/
+ *   Add review data to IndexDB for offline usage.
+ */
   dbPromised.then(db => {
         fetch("http://localhost:1337/reviews/")
-          .then(function(response){
+          .then(response => {
              return response.json()
         })
-          .then(function(jsonData){
+          .then(jsonData => {
             var tx = db.transaction("reviews", "readwrite");
             var store = tx.objectStore("reviews");
             console.log(jsonData);
@@ -34,6 +34,7 @@ import idb from 'idb';
             return tx.complete && store.getAll();
           });
   });
+
 /**
   When user offline,get review from indexDB for offline usage.
 */
@@ -51,7 +52,6 @@ if(window.navigator.onLine){
   }).then(data => {
     const reviewForRest = data.filter(res => parseInt(res.restaurant_id) == getParameterByName('id'));
     const ul = document.getElementById('reviews-list');
-    console.log('indsad:' ,reviewForRest);
     fillReviewsHTML(reviewForRest)
     });
 }
@@ -68,7 +68,7 @@ if(window.navigator.onLine){
         .then(function(response){
          return response.json()
         })
-        .then(function(jsonData){
+        .then(jsonData => {
           var tx = db.transaction("items", "readwrite");
           var store = tx.objectStore("items");
           console.log(jsonData);
@@ -90,11 +90,7 @@ if(window.navigator.onLine){
     
   }).then(data => {
     const IndexedRestData = data.find(res => parseInt(res.id) == getParameterByName('id'));
-    console.log('ABD:', IndexedRestData);
     fillRestaurantHTML(IndexedRestData);
-    const opHours = IndexedRestData.name;
-    console.log('XCVB:',opHours);
-   //fillRestaurantHoursHTML(opHours);
   });
 }
 

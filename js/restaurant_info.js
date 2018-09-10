@@ -59,7 +59,7 @@ fetchRestaurantFromURL = (callback) => {
         console.error(error);
         return;
       }
-      console.log('bbbb:', restaurant);
+      
       fillRestaurantHTML();
       callback(null, restaurant)
     });
@@ -96,7 +96,6 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   "An Image of Roberta's Pizza Restaurant","An Image of Hometown BBQ Restaurant",
   "An Image of ImaSuperiority Burger Restaurant","An Image of The Dutch Restaurant","An Image of Mu Ramen Restaurant",
   "An Image of Casa Enrique Restaurant"];
-  console.log('TRTR:', restaurant);
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
   const address = document.getElementById('restaurant-address');
@@ -119,23 +118,21 @@ const source1=document.getElementsByTagName("source");
 const source2=document.createElement("source");
  source1[0].media="(min-width:1024px)";
  source2.media="(min-width:480px)";
+ 
+ //Add images for every restaurant by restaurant id
  for(var i=1; i<=10; i++){
   if(restaurant.id==i){
   img.src = "images/"+i+"-500_small.jpg";
   source1[0].srcset=DBHelper.imageUrlForRestaurant(restaurant);
-  //source1[0].setAttribute('alt',altArray[i-1]);
-  //source2.setAttribute('alt',altArray[i-1]);
   img.setAttribute('alt',altArray[i-1]);
   source2.srcset="images/"+i+"-1000_medium.jpg";
   }
  }
-
  picture[0].appendChild(source2);
  picture[0].appendChild(img);
 
   // fill operating hours
   if (restaurant.operating_hours) {
-    console.log('Star:', restaurant.operating_hours);
     fillRestaurantHoursHTML();
   }
 }
@@ -156,7 +153,6 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     const time = document.createElement('td');
     time.innerHTML = operatingHours[key];
     row.appendChild(time);
-
     hours.appendChild(row);
    
   }
@@ -167,7 +163,6 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  * Create all reviews HTML and add them to the webpage.
  */
 
- //BUARADAN DEVAM- sıkıntı review değişkenine self.restaurant.review dediğimde veri gitmiyor ?
 fillReviewsHTML = (reviews = self.review) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
@@ -175,8 +170,7 @@ fillReviewsHTML = (reviews = self.review) => {
   const modal = document.getElementById('myModal');
   const span = document.getElementsByClassName("close")[0];
   const restidInput = document.getElementById('resid');
-  //
-  console.log("bayrak:" , reviews);
+
   // When the user clicks the button, open the modal 
 reviewButton.onclick = function() {
     modal.style.display = "block";
@@ -193,6 +187,10 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+/**
+Creates review button
+*/
   restidInput.value = getParameterByName('id');
   reviewButton.id = 'reviews-button';
   reviewButton.innerHTML = 'Add Review';
@@ -211,7 +209,6 @@ window.onclick = function(event) {
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });
-  //ul.appendChild(createReviewHTML(reviews));
   container.appendChild(ul);
 }
 
@@ -260,15 +257,17 @@ createReviewHTML = (review) => {
 
   return li;
 }
+/**
+ Check clicked button and browser online status then submit data to api.
+*/
 const rewButton = document.getElementById("submitReview");
  rewButton.addEventListener("click",function(){
-    //event.preventDefault();
       if(window.navigator.onLine){
         DBHelper.PostReviewData();
       }
       else{
-        console.log('net yok');
-        //DBHelper.OfflinePostReviewData();
+        console.log('offline');
+        
       const rest_id = parseInt(getParameterByName('id'));
       const uname = document.getElementById("uname").value;
       const rate = parseInt(document.getElementById("rate").value);

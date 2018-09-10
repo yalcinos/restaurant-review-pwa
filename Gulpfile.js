@@ -9,7 +9,7 @@ var uglifyEs = require('gulp-uglify-es').default;
 var browserify = require('gulp-browserify')
 
 
-gulp.task('default',['scripts-dist','scripts-dist-rest-info'], function() {
+gulp.task('default',['scripts-dist','scripts-dist-rest-info','transfer-rest','transfer'], function() {
 
 	console.log('Success!');
 })

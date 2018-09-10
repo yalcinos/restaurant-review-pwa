@@ -1,18 +1,20 @@
 import idb from 'idb';
 
-
   const dbPromised = idb.open('restaurant-store', 1, upgradeDB => {
   switch (upgradeDB.oldVersion) {
     case 0:
       upgradeDB.createObjectStore('items', {keyPath:'id'});
   }
 });
+/**
+ *Put data which is fetched to indexDB.
+ */
   dbPromised.then(db => {
         fetch("http://localhost:1337/restaurants/")
-        .then(function(response){
+        .then(response => {
          return response.json()
         })
-        .then(function(jsonData){
+        .then(jsonData => {
           var tx = db.transaction("items", "readwrite");
           var store = tx.objectStore("items");
           console.log(jsonData);
@@ -23,13 +25,9 @@ import idb from 'idb';
         });
 }).then(result => {console.log("Done!")});
 
-//Get Data from indexDB
-  dbPromised.then(db => {return db.transaction("items")
-                        .objectStore("items").get(1);
-                      }).then(obj => console.log(obj.name,obj.is_favorite,obj.neighborhood));
-
-
-//Post indexed data to page when user offline.
+/**
+ *Retrieve data from indexDB when user is offline.
+ */
 if(window.navigator.onLine){
   console.log('Online!');
 }else{

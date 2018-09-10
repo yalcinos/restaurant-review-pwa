@@ -13,6 +13,9 @@ var dbPromised = _idb2.default.open('restaurant-store', 1, function (upgradeDB) 
       upgradeDB.createObjectStore('items', { keyPath: 'id' });
   }
 });
+/**
+ *Put data which is fetched to indexDB.
+ */
 dbPromised.then(function (db) {
   fetch("http://localhost:1337/restaurants/").then(function (response) {
     return response.json();
@@ -29,14 +32,9 @@ dbPromised.then(function (db) {
   console.log("Done!");
 });
 
-//Get Data from indexDB
-dbPromised.then(function (db) {
-  return db.transaction("items").objectStore("items").get(1);
-}).then(function (obj) {
-  return console.log(obj.name, obj.is_favorite, obj.neighborhood);
-});
-
-//Post indexed data to page when user offline.
+/**
+ *Retrieve data from indexDB when user is offline.
+ */
 if (window.navigator.onLine) {
   console.log('Online!');
 } else {
