@@ -1,23 +1,20 @@
 
-
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw.js').then(function(registration) {
       // Registration was successful
-  
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
     }, function(err) {
       // registration failed :(
       console.log('ServiceWorker registration failed: ', err);
     });
-   
   }
 
   );
 }
 
-var staticCacheName='restaurant-v1';
-//var id =getParameterByName('id');
+var staticCacheName ='restaurant-v1';
+
 self.addEventListener('install',function(event){
 
 //distler eklendi.
@@ -60,10 +57,10 @@ self.addEventListener('activate',function(event){
 			caches.keys().then(function(cacheNames){
 
 				return Promise.all(
-						 cacheNames.filter(function(cacheName){
+		cacheNames.filter(function(cacheName){
 					return cacheName.startsWith('restaurant-') && cacheName != staticCacheName;
 					}).map(function(cacheName){
-					return cache.delete(cacheName);
+				return caches.delete(cacheName);
 				})
 			);
 				
