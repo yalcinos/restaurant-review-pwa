@@ -25,8 +25,6 @@ Steps;
 
 mws-restaurant-stage-3 => config => blueprints.js => change //defaultLimit=30 to defaultLimit=60 (at the bottom of the page.) .  After that you will see everything it works.
 
-If you don't work again, I can add a video to project for make sure it is working. Because I tried multiple times, it is working 2 computers.
-
 ### What do I do from here?
 
 1. In this folder, start up a simple HTTP server to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. 
